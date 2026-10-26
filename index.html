@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>我们的地图</title>
+<meta name="description" content="把一起走过的地方，一个一个钉在中国地图上。" />
+<link rel="stylesheet" href="assets/style.css" />
+</head>
+<body data-level="country">
+
+<div class="app">
+
+  <section class="stage" aria-label="中国地图">
+    <svg id="map" role="img" aria-label="中国地图，可点击省份放大">
+      <defs>
+        <radialGradient id="vign" cx="50%" cy="45%" r="65%">
+          <stop offset="60%" stop-color="#000" stop-opacity="0" />
+          <stop offset="100%" stop-color="#000" stop-opacity=".55" />
+        </radialGradient>
+      </defs>
+      <rect id="bg" x="-4000" y="-4000" width="12000" height="12000" fill="transparent" />
+      <g id="gProv"></g>
+      <g id="gGrat"></g>
+      <g id="gXian"></g>
+      <g id="gPins"></g>
+      <g id="gSea"></g>
+      <g id="gRoutes"></g>
+      <g id="gMarks"></g>
+      <g id="gLabels"></g>
+      <rect class="vignette" x="-4000" y="-4000" width="12000" height="12000" fill="url(#vign)" pointer-events="none" />
+    </svg>
+
+    <header class="brand">
+      <p class="eyebrow" id="brandEyebrow">OUR MAP</p>
+      <h1 id="brandTitle">我们的地图</h1>
+      <p class="brand-sub" id="brandSub">把一起走过的地方，钉在这张图上</p>
+      <p class="brand-mark">J &amp; W</p>
+    </header>
+
+    <button id="back" class="back" type="button"><span class="ar">←</span><span id="backText">返回全国</span></button>
+
+    <div class="zoombox" id="zoombox">
+      <button id="zin" type="button" aria-label="放大">＋</button>
+      <button id="zout" type="button" aria-label="缩小">－</button>
+    </div>
+
+    <div class="legend">
+      <span class="lg"><i class="lg-dot"></i>走过的地方</span>
+      <span class="lg"><i class="lg-line"></i>先后的顺序</span>
+      <p class="lg-hint">点省份放大 · 点圆点看回忆</p>
+    </div>
+
+    <figure class="inset" id="inset"><figcaption>南海诸岛</figcaption></figure>
+
+    <div class="tip" id="tip" role="status"></div>
+  </section>
+
+  <aside class="panel">
+    <button class="sheet-handle" id="sheetHandle" type="button" aria-label="展开或收起">
+      <span class="bar"></span>
+      <span class="chev">⌄</span>
+      <span class="hint-text" id="sheetHint">目录</span>
+    </button>
+    <div class="panel-head">
+      <nav class="crumbs" id="crumbs" aria-label="位置"></nav>
+      <h2 class="p-title" id="pTitle"></h2>
+      <p class="p-sub" id="pSub"></p>
+    </div>
+    <div class="p-body" id="pBody"></div>
+    <div class="p-foot" id="pFoot"></div>
+  </aside>
+
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片">
+  <button class="lb-close" type="button" aria-label="关闭">✕</button>
+  <div class="lb-stage"><img id="lbImg" alt="" /></div>
+  <div class="lb-cap" id="lbCap"></div>
+  <button class="lb-prev" type="button" aria-label="上一张">‹</button>
+  <button class="lb-next" type="button" aria-label="下一张">›</button>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+
+<script src="assets/map-data.js"></script>
+<script src="assets/cities.js"></script>
+<script src="assets/xian.js"></script>
+<script src="data/memories.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
