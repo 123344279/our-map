@@ -931,33 +931,64 @@
   var XI = window.XIAN || null;
   var xianBox = null;
 
-  // 高德静态图（zoom 12，1024px，中心钟楼）的地理范围与摆放位置
-  var XI_IMG = { lon0: 108.7665, lat0: 34.4073, lon1: 109.1179, lat1: 34.1147 };
-  var XI_RECT = { x: 3000, y: 3000, w: 1000, h: 1000 };
-
-  function xiProject(lon, lat) {
-    return [
-      XI_RECT.x + (lon - XI_IMG.lon0) / (XI_IMG.lon1 - XI_IMG.lon0) * XI_RECT.w,
-      XI_RECT.y + (XI_IMG.lat0 - lat) / (XI_IMG.lat0 - XI_IMG.lat1) * XI_RECT.h
-    ];
-  }
-
   function buildXian() {
     var g = document.getElementById('gXian');
-    if (!g) return;
+    if (!g || !XI) return;
     var ns = 'http://www.w3.org/2000/svg';
-    g.innerHTML = '';
-    var im = document.createElementNS(ns, 'image');
-    im.setAttribute('href', 'assets/xian-map.png');
-    im.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'assets/xian-map.png');
-    im.setAttribute('x', XI_RECT.x);
-    im.setAttribute('y', XI_RECT.y);
-    im.setAttribute('width', XI_RECT.w);
-    im.setAttribute('height', XI_RECT.h);
-    im.setAttribute('preserveAspectRatio', 'none');
-    im.setAttribute('class', 'xn-img');
-    g.appendChild(im);
-    xianBox = { x: XI_RECT.x, y: XI_RECT.y, w: XI_RECT.w, h: XI_RECT.h };
+
+    function line(pts, cls) {
+      var d = '';
+      for (var i = 0; i < pts.length; i++) {
+        var p = project(pts[i][0], pts[i][1]);
+        d += (i ? 'L' : 'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2);
+      }
+      var el = document.createElementNS(ns, 'path');
+      el.setAttribute('d', d);
+      el.setAttribute('class', cls);
+      g.appendChild(el);
+      return el;
+    }
+
+    // 街区肌理垫底
+    if (XI.grid) {
+      var gg = XI.grid;
+      for (var lon = gg.lon0; lon <= gg.lon1; lon += gg.step) {
+        line([[lon, gg.lat0], [lon, gg.lat1]], 'xn-grid');
+      }
+      for (var lat = gg.lat0; lat <= gg.lat1; lat += gg.step) {
+        line([[gg.lon0, lat], [gg.lon1, lat]], 'xn-grid');
+      }
+    }
+
+    (XI.water || []).forEach(function (w) { line(w.pts, 'xn-water'); });
+    (XI.roads || []).forEach(function (r) { line(r.pts, 'xn-road'); });
+    (XI.arterials || []).forEach(function (r) { line(r.pts, 'xn-art'); });
+    (XI.rings || []).forEach(function (r) { line(r.pts, 'xn-ring'); });
+    (XI.metro || []).forEach(function (m) { line(m.pts, 'xn-metro'); });
+    if (XI.moat) line(XI.moat, 'xn-moat');
+    if (XI.wall) line(XI.wall, 'xn-wall');
+
+    // 地名（跟随缩放，保持屏幕字号）
+    (XI.labels || []).forEach(function (L) {
+      var p = project(L.at[0], L.at[1]);
+      var grp = document.createElementNS(ns, 'g');
+      var t = document.createElementNS(ns, 'text');
+      t.setAttribute('class', 'xn-label');
+      t.setAttribute('text-anchor', 'middle');
+      t.textContent = L.name;
+      grp.appendChild(t);
+      g.appendChild(grp);
+      scaleItems.push({ el: grp, x: p[0], y: p[1] });
+    });
+
+    if (XI.bbox) {
+      var a = project(XI.bbox[0], XI.bbox[1]);
+      var b = project(XI.bbox[2], XI.bbox[3]);
+      xianBox = {
+        x: Math.min(a[0], b[0]), y: Math.min(a[1], b[1]),
+        w: Math.abs(b[0] - a[0]), h: Math.abs(b[1] - a[1])
+      };
+    }
   }
 
   // 西安的回忆按坐标落成钉子；靠得太近的自动合并成一个「簇」，
@@ -974,7 +1005,7 @@
     if (!city || !city.items) return;
     city.items.forEach(function (it, idx) {
       if (!it.coord) return;
-      var p = xiProject(it.coord[0], it.coord[1]);
+      var p = project(it.coord[0], it.coord[1]);
       pinData.push({ x: p[0], y: p[1], idx: idx, name: it.place || '' });
     });
   }
@@ -1131,6 +1162,17 @@
   }
 
   function init() {
+    // 封面：点「进去看看」才进地图；带 hash 或 ?nocc=1 时直接跳过
+    var cover = document.getElementById('cover');
+    var coverBtn = document.getElementById('coverBtn');
+    function hideCover() {
+      if (!cover) return;
+      cover.classList.add('gone');
+      setTimeout(function () { cover.style.display = 'none'; }, 900);
+    }
+    if (coverBtn) coverBtn.addEventListener('click', hideCover);
+    if (location.hash.length > 1 || /[?&]nocc=1/.test(location.search)) hideCover();
+
     buildInset();
     buildXian();
     pinLayer = document.getElementById('gPins');
