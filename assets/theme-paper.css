@@ -56,9 +56,19 @@ body[data-level="province"] .prov.active {
 .citylbl.current text { fill: #8c2f1c; }
 
 /* 西安街道层 */
+#gXian { display: none; }
+#gXianImg { opacity: 0; transition: opacity 0.55s ease; pointer-events: none; }
+#map.in-xian #gXianImg { opacity: 1; }
+.xn-layer {
+  filter: grayscale(0.92) sepia(0.14) contrast(0.94) brightness(1.06);
+  mix-blend-mode: multiply;
+}
+.xn-block { fill: rgba(60, 48, 34, 0.058); }
+.xn-park { fill: rgba(96, 116, 86, 0.14); }
+.xn-pond { fill: rgba(84, 104, 116, 0.18); }
 .xn-grid { stroke: rgba(60, 48, 34, 0.07); }
-.xn-road { stroke: rgba(60, 48, 34, 0.2); }
-.xn-art { stroke: rgba(60, 48, 34, 0.38); }
+.xn-road { stroke: rgba(60, 48, 34, 0.26); stroke-width: 0.9; }
+.xn-art { stroke: rgba(60, 48, 34, 0.46); stroke-width: 1.5; }
 .xn-ring { stroke: rgba(60, 48, 34, 0.34); }
 .xn-metro { stroke: rgba(84, 108, 82, 0.42); }
 .xn-moat { stroke: rgba(84, 104, 116, 0.4); }
@@ -167,8 +177,9 @@ kbd { border-color: var(--line); color: var(--dim); }
 .inset { border-color: rgba(60, 48, 34, 0.22); background: rgba(246, 241, 230, 0.72); }
 .inset figcaption { border-top-color: rgba(60, 48, 34, 0.14); color: var(--mute); }
 
-/* 封面：纸 + 照片，暖色压边 */
-.cover { background: var(--bg); }
+/* 封面：默认隐藏，JS 决定是否显示（JS 出错时不挡路） */
+.cover { display: none; }
+.cover.show { display: flex; }
 .cover::after {
   background: linear-gradient(
     to bottom,
