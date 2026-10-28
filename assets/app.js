@@ -184,29 +184,36 @@
   // 这样主图不会被拉成一条又长又空的竖条。
   if (gSea) gSea.parentNode && gSea.parentNode.removeChild(gSea);
 
-  // 经纬网：全国视角隐藏，放大后淡入，让近景有“地图”的尺度感
+  // 经纬网：两档，按缩放切换——全国 5°，省里 2°。永远只有一套线。
+  var gratLayers = [];
   (function buildGraticule() {
     var g = document.getElementById('gGrat');
     if (!g) return;
     var ns = 'http://www.w3.org/2000/svg';
-    function line(pts) {
-      var p = document.createElementNS(ns, 'path');
-      p.setAttribute('d', 'M' + pts.map(function (q) {
-        return q[0].toFixed(1) + ' ' + q[1].toFixed(1);
-      }).join('L'));
-      p.setAttribute('class', 'grat-line');
-      g.appendChild(p);
-    }
-    for (var lon = 70; lon <= 140; lon += 1) {
-      var mer = [];
-      for (var lat = 0; lat <= 56; lat += 1) mer.push(project(lon, lat));
-      line(mer);
-    }
-    for (var la = 0; la <= 56; la += 1) {
-      var par = [];
-      for (var lo = 70; lo <= 140; lo += 1) par.push(project(lo, la));
-      line(par);
-    }
+    [5, 2].forEach(function (step) {
+      var grp = document.createElementNS(ns, 'g');
+      grp.setAttribute('class', 'grat');
+      function line(pts) {
+        var p = document.createElementNS(ns, 'path');
+        p.setAttribute('d', 'M' + pts.map(function (q) {
+          return q[0].toFixed(1) + ' ' + q[1].toFixed(1);
+        }).join('L'));
+        p.setAttribute('class', 'grat-line');
+        grp.appendChild(p);
+      }
+      for (var lon = 70; lon <= 140; lon += step) {
+        var mer = [];
+        for (var lat = 0; lat <= 56; lat += 2) mer.push(project(lon, lat));
+        line(mer);
+      }
+      for (var la = 0; la <= 56; la += step) {
+        var par = [];
+        for (var lo = 70; lo <= 140; lo += 2) par.push(project(lo, la));
+        line(par);
+      }
+      g.appendChild(grp);
+      gratLayers.push({ el: grp, step: step });
+    });
   })();
 
   // 路线
@@ -368,6 +375,17 @@
     syncScale();
     layoutPins();
     updateXianImgs();
+    updateGraticule();
+  }
+
+  function updateGraticule() {
+    if (!gratLayers.length) return;
+    var coarse = gratLayers[0], fine = gratLayers[1];
+    var w = view.w;
+    // 互斥切换：宽于 330 用 5°，窄于 330 用 2°，绝不重叠
+    var near = w < 330;
+    coarse.el.style.opacity = near ? '0' : '1';
+    fine.el.style.opacity = near ? '1' : '0';
   }
 
   function animateTo(v, dur) {
@@ -455,7 +473,7 @@
   function goCountry() {
     state.level = 'country'; state.prov = null; state.city = null; state.sheetFull = false;
     paint(); renderPanel();
-    animateTo(fit(COUNTRY, 0.035), 1150);
+    animateTo(fit(COUNTRY, isMobile() ? -0.16 : 0.035), 1150);
     syncHash();
   }
 
