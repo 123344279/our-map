@@ -35,12 +35,19 @@
           <stop offset="60%" stop-color="#000" stop-opacity="0" />
           <stop offset="100%" stop-color="#000" stop-opacity=".55" />
         </radialGradient>
+        <radialGradient id="xfg" cx="50%" cy="50%" r="62%">
+          <stop offset="52%" stop-color="#fff" stop-opacity="1" />
+          <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+        </radialGradient>
+        <mask id="xmask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+          <rect x="0" y="0" width="1" height="1" fill="url(#xfg)" />
+        </mask>
       </defs>
       <rect id="bg" x="-4000" y="-4000" width="12000" height="12000" fill="transparent" />
       <g id="gProv"></g>
       <g id="gGrat"></g>
       <g id="gXian"></g>
-      <g id="gXianImg"></g>
+      <g id="gXianImg" mask="url(#xmask)"></g>
       <g id="gPins"></g>
       <g id="gSea"></g>
       <g id="gRoutes"></g>
