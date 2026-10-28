@@ -278,11 +278,30 @@
     provLabelEls.push({ name: p.name, el: g });
   });
 
+  // 城市贴画（生图 + 抠底，见 shots/stamps-ai2.png）
+  var STAMP = {
+    '西安': 'xian', '杭州': 'hangzhou', '南浔': 'nanxun',
+    '乌镇': 'wuzhen', '珠海': 'zhuhai', '汕尾': 'shanwei'
+  };
+
   // 城市名
   var cityLabelEls = [];
   stops.forEach(function (s) {
     var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     g.setAttribute('class', 'lbl citylbl');
+    var key = STAMP[s.city];
+    if (key) {
+      var im = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      var href = 'assets/stamp-' + key + '.png';
+      im.setAttribute('href', href);
+      im.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', href);
+      im.setAttribute('x', '-11');
+      im.setAttribute('y', '4');
+      im.setAttribute('width', '22');
+      im.setAttribute('height', '22');
+      im.setAttribute('class', 'stamp');
+      g.appendChild(im);
+    }
     var t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     t.setAttribute('text-anchor', 'middle');
     t.setAttribute('dy', '-12');
