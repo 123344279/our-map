@@ -55,6 +55,9 @@ body[data-level="province"] .prov.active {
 .citylbl text { fill: rgba(43, 38, 32, 0.85); }
 .citylbl.current text { fill: #8c2f1c; }
 
+/* 右侧内容交叉淡入 */
+#pBody { transition: opacity 0.16s ease, transform 0.16s ease; }
+
 /* 西安街道层 */
 #gXian { display: none; }
 #gXianImg { opacity: 0; transition: none; pointer-events: none; }
