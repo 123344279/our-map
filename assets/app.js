@@ -358,12 +358,15 @@
     var f = { cx: view.x + view.w / 2, cy: view.y + view.h / 2, w: view.w, h: view.h };
     var t = { cx: v.x + v.w / 2, cy: v.y + v.h / 2, w: v.w, h: v.h };
     var start = performance.now();
+    // 拉得越远，中途"先退一点再推近"的弧度越大
+    var arc = Math.min(0.16, Math.abs(Math.log(t.w / f.w)) * 0.045);
     function ease(x) { return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
     function step(now) {
       var p = Math.min(1, (now - start) / dur);
       var e = ease(p);
-      var w = f.w * Math.pow(t.w / f.w, e);
-      var h = f.h * Math.pow(t.h / f.h, e);
+      var bump = 1 + arc * Math.sin(Math.PI * e);
+      var w = f.w * Math.pow(t.w / f.w, e) * bump;
+      var h = f.h * Math.pow(t.h / f.h, e) * bump;
       var cx = f.cx + (t.cx - f.cx) * e;
       var cy = f.cy + (t.cy - f.cy) * e;
       setView({ x: cx - w / 2, y: cy - h / 2, w: w, h: h });
@@ -506,7 +509,22 @@
     }).join('');
   }
 
+  var panelTimer = 0;
   function renderPanel() {
+    clearTimeout(panelTimer);
+    if (REDUCED) { renderPanelNow(); return; }
+    bodyEl.style.opacity = '0';
+    bodyEl.style.transform = 'translateY(6px)';
+    panelTimer = setTimeout(function () {
+      renderPanelNow();
+      requestAnimationFrame(function () {
+        bodyEl.style.opacity = '1';
+        bodyEl.style.transform = 'none';
+      });
+    }, 110);
+  }
+
+  function renderPanelNow() {
     if (state.level === 'country') renderCountry();
     else if (state.level === 'province') renderProvince(state.prov);
     else renderCity(state.prov, state.city);
@@ -946,6 +964,18 @@
 
   function updateXianImgs() {
     if (!xiImgs.length) return;
+    var g = document.getElementById('gXianImg');
+    // 图层浓度跟着镜头一帧帧逼近目标值（不再一次性切换）
+    if (g) {
+      var want = svg.classList.contains('in-xian') ? 1 : 0;
+      if (REDUCED) {
+        g.style.opacity = String(want);
+      } else {
+        var cur = parseFloat(g.style.opacity || '0');
+        if (isNaN(cur)) cur = 0;
+        g.style.opacity = (cur + (want - cur) * 0.12).toFixed(3);
+      }
+    }
     var k = view.w / XI_RECT.w;
     var o13 = Math.max(0, Math.min(1, (0.9 - k) / 0.28));
     var o14 = Math.max(0, Math.min(1, (0.56 - k) / 0.18));
