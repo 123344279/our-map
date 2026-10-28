@@ -353,12 +353,44 @@ body[data-level="city"] .citylbl .stamp { opacity: 0; }
 .zoombox button { font-size: 15px; }
 
 @media (max-width: 760px) {
-  .stage::before { inset: 10px; }
-  .stage .atlas-marks { inset: 10px; }
+  .stage::before { inset: 8px; }
+  .stage .atlas-marks { inset: 8px; }
   .atlas-marks b, .atlas-marks u { display: none; }
-  .brand { padding: 22px 0 0 22px; }
-  .brand h1 { font-size: 27px; }
-  .row { grid-template-columns: 48px 1fr auto; padding: 10px 22px; }
-  .memory { padding: 22px 22px 26px; }
-  .memory:first-of-type .m-title { font-size: 19px; }
+
+  /* 封面：别把人裁掉 */
+  .cover-bg { background-position: 58% 24%; }
+  .cover-inner { padding: 0 22px 14vh; }
+  .cover-title { font-size: 34px; letter-spacing: 0.18em; margin-bottom: 16px; }
+  .cover-line { font-size: 11.5px; letter-spacing: 0.1em; margin-bottom: 30px; }
+  .cover-btn { padding: 11px 22px; font-size: 12px; }
+  .cover-eyebrow { font-size: 9px; letter-spacing: 0.3em; margin-bottom: 14px; }
+
+  /* 品牌块 */
+  .brand { padding: 20px 0 0 20px; }
+  .brand h1 { font-size: 24px; letter-spacing: 0.12em; }
+  .brand-sub { font-size: 10.5px; }
+  .eyebrow { font-size: 8.5px; letter-spacing: 0.3em; }
+  .brand-mark { font-size: 9px; }
+  .legend { left: 20px; bottom: 24px; font-size: 9px; }
+  .legend .lg-hint { display: none; }
+
+  /* 面板：留白收到 20px */
+  .p-head { padding: 18px 20px 14px; }
+  .crumbs { font-size: 9px; letter-spacing: 0.16em; margin-bottom: 12px; }
+  .p-title { font-size: 26px; letter-spacing: 0.1em; }
+  .p-sub { font-size: 10px; gap: 0 7px; margin-top: 9px; }
+  .intro { font-size: 13px; line-height: 1.85; padding: 16px 20px; }
+  .sec-label { padding: 16px 20px 8px; font-size: 9px; }
+  .year { padding: 14px 20px 6px; }
+  .row { grid-template-columns: 46px 1fr auto; padding: 10px 20px; gap: 0 10px; }
+  .row:hover { padding-left: 22px; }
+  .r-title { font-size: 13px; }
+  .memory { padding: 20px 20px 24px; }
+  .m-title { font-size: 16px; margin-bottom: 6px; }
+  .m-text { font-size: 13.5px; line-height: 1.95; margin-bottom: 14px; }
+  .memory:first-of-type .m-title { font-size: 18px; }
+  .p-seal { display: none; }
+  .back { top: 18px; right: 74px; font-size: 11px; padding: 7px 12px; }
+  .zoombox { top: 18px; right: 18px; }
+  .zoombox button { width: 30px; height: 30px; font-size: 14px; }
 }
