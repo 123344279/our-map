@@ -6,6 +6,10 @@
    ============================================================ */
 
 :root {
+  /* 子集化的思源宋体（Noto Serif SC），只含本站用到的 932 字 */
+  --serif: "NotoSerifSC-sub", "Songti SC", "STSong", "Source Han Serif SC", serif;
+  --sans: "PingFang SC", "MiSans", "HarmonyOS Sans SC", "Noto Sans SC",
+          "Microsoft YaHei", "Hiragino Sans GB", system-ui, sans-serif;
   --t-xs: 9.5px;
   --t-sm: 11px;
   --t-md: 13px;
@@ -15,6 +19,31 @@
   --rule: rgba(60, 48, 34, 0.14);
   --rule-soft: rgba(60, 48, 34, 0.07);
   --paper-edge: rgba(120, 100, 74, 0.16);
+}
+
+@font-face {
+  font-family: "NotoSerifSC-sub";
+  src: url("serif-sub.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- 经纬网：只做"底的刻度" ---------- */
+/* 父层永远可见，浓淡由两个子层各自的 opacity 决定（互斥，不叠） */
+#gGrat { opacity: 1 !important; transition: none !important; }
+.grat { pointer-events: none; transition: opacity 0.45s ease; }
+.grat-line {
+  fill: none;
+  stroke: rgba(60, 48, 34, 0.13);
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;
 }
 
 /* ---------- 城市贴画 ---------- */
