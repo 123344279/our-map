@@ -17,6 +17,62 @@
   --paper-edge: rgba(120, 100, 74, 0.16);
 }
 
+/* ---------- 印章与落款 ---------- */
+.seal {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(176, 68, 45, 0.7);
+  border-radius: 2px;
+  color: rgba(176, 68, 45, 0.85);
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  transform: rotate(-4deg);
+  box-shadow: inset 0 0 0 3px rgba(176, 68, 45, 0.07);
+  opacity: 0.92;
+}
+.p-seal {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 34px;
+  height: 34px;
+  font-size: 11px;
+  opacity: 0.75;
+}
+.cover-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 34px;
+  pointer-events: none;
+}
+.cover-ded {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(250, 243, 231, 0.72);
+}
+.cover-bottom .seal {
+  border-color: rgba(240, 168, 140, 0.8);
+  color: rgba(245, 190, 168, 0.92);
+  box-shadow: inset 0 0 0 3px rgba(240, 168, 140, 0.12);
+  background: rgba(40, 28, 18, 0.18);
+}
+@media (max-width: 760px) {
+  .cover-bottom { padding: 0 20px; bottom: 18px; }
+  .cover-ded { font-size: 9px; letter-spacing: 0.2em; }
+  .cover-bottom .seal { width: 34px; height: 34px; font-size: 10px; }
+  .p-seal { display: none; }
+}
+
 /* ---------- 图廓：让地图成为"一页图版" ---------- */
 .stage::before {
   content: "";
