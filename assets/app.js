@@ -436,7 +436,7 @@
   function goCountry() {
     state.level = 'country'; state.prov = null; state.city = null; state.sheetFull = false;
     paint(); renderPanel();
-    animateTo(fit(COUNTRY, 0.035), 820);
+    animateTo(fit(COUNTRY, 0.035), 1150);
     syncHash();
   }
 
@@ -444,7 +444,7 @@
     if (!provs.has(name)) return;
     state.level = 'province'; state.prov = name; state.city = null; state.sheetFull = false;
     paint(); renderPanel();
-    animateTo(fit(provs.get(name).box, 0.42), 780);
+    animateTo(fit(provs.get(name).box, 0.42), 1100);
     syncHash();
   }
 
@@ -453,9 +453,9 @@
     if (!s) return;
     state.level = 'city'; state.prov = prov; state.city = city; state.focus = null;
     paint(); renderPanel();
-    if (city === '西安' && xianBox) animateTo(fit(xianBox, 0.05), 820);
-    else if (s.coord === 'auto') animateTo(fit(provs.get(prov).box, 0.42), 700);
-    else animateTo(fit(cityBox(s.coord), 0.06), 760);
+    if (city === '西安' && xianBox) animateTo(fit(xianBox, 0.05), 1300);
+    else if (s.coord === 'auto') animateTo(fit(provs.get(prov).box, 0.42), 1000);
+    else animateTo(fit(cityBox(s.coord), 0.06), 1050);
     syncHash();
   }
 
@@ -521,7 +521,7 @@
         bodyEl.style.opacity = '1';
         bodyEl.style.transform = 'none';
       });
-    }, 110);
+    }, 130);
   }
 
   function renderPanelNow() {
