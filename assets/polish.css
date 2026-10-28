@@ -17,6 +17,16 @@
   --paper-edge: rgba(120, 100, 74, 0.16);
 }
 
+/* ---------- 城市贴画 ---------- */
+.citylbl .stamp {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+body[data-level="province"] .citylbl .stamp,
+body[data-level="city"] .citylbl .stamp { opacity: 0.88; }
+body[data-level="city"] .citylbl .stamp { opacity: 0; }
+.citylbl.current .stamp { opacity: 0.95 !important; }
+
 /* ---------- 印章与落款 ---------- */
 .seal {
   display: inline-grid;
