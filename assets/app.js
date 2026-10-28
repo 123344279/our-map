@@ -679,7 +679,7 @@
       if (it.title) html += '<h3 class="m-title">' + esc(it.title) + '</h3>';
       if (it.text) html += '<p class="m-text">' + esc(it.text) + '</p>';
       if (photos.length) {
-        html += '<div class="m-photos' + (photos.length > 1 ? ' two' : '') + '">';
+        html += '<div class="m-photos n' + Math.min(3, photos.length) + '">';
         photos.forEach(function (src, k) {
           html += '<button class="photo" data-photos="' + i + '" data-k="' + k + '">' +
             '<img src="' + esc(src) + '" alt="' + esc(it.title || city) + '" loading="lazy" ' +
