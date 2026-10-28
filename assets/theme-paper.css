@@ -57,8 +57,7 @@ body[data-level="province"] .prov.active {
 
 /* 西安街道层 */
 #gXian { display: none; }
-#gXianImg { opacity: 0; transition: opacity 0.55s ease; pointer-events: none; }
-#map.in-xian #gXianImg { opacity: 1; }
+#gXianImg { opacity: 0; transition: none; pointer-events: none; }
 .xn-layer {
   filter: grayscale(0.92) sepia(0.14) contrast(0.94) brightness(1.06);
   mix-blend-mode: multiply;
